@@ -1,0 +1,56 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- Post image 1080x1350: hook title, preview of the resource (1 readable card, 2 blurred + lock), keyword band.
+     The "comment KEYWORD" instruction lives HERE, never in the post text. -->
+<script>/*DATA*/</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1350px;overflow:hidden;font-family:var(--fb),sans-serif;color:#fff;
+  background:radial-gradient(ellipse 90% 70% at 50% 0%,var(--accent) 0%,var(--bg1) 45%,var(--bg2) 100%);
+  display:flex;flex-direction:column;padding:70px 70px 0}
+.top{display:flex;align-items:center;gap:16px;height:56px}
+.top img{height:52px;background:#fff;border-radius:14px;padding:8px 14px}
+.top .nm{font-family:var(--ft);font-weight:700;font-size:34px}
+.kick{margin-top:44px;font-family:var(--ft);font-weight:600;font-size:30px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+h1{font-family:var(--ft);font-weight:800;font-size:80px;line-height:1.03;margin:14px 0 20px;letter-spacing:-.01em}
+h1 span{color:var(--kw)}
+.sub{font-weight:500;font-size:33px;opacity:.95}
+.wrap{position:relative;margin-top:44px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;flex:1;max-height:510px}
+.pg{background:#fff;border-radius:20px;padding:22px;color:var(--ink);filter:blur(3.5px)}
+.pg:first-child{filter:none}
+.pl{font-size:18px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.pt{font-family:var(--ft);font-size:26px;font-weight:700;margin:8px 0 18px;line-height:1.15}
+.ln{height:14px;border-radius:7px;background:var(--soft);margin-bottom:12px}.w1{width:90%}.w2{width:70%}.w3{width:82%}
+.lock{position:absolute;right:120px;top:150px;background:var(--band);color:#fff;border-radius:100px;padding:16px 28px;font-weight:700;font-size:28px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.band{margin:44px -70px 0;background:var(--band);padding:40px 70px;text-align:center;flex:none}
+.band p{font-family:var(--ft);font-size:34px;font-weight:600;opacity:.85}
+.band b{display:block;font-family:var(--ft);font-size:84px;font-weight:800;color:var(--kw);letter-spacing:.02em;margin-top:4px}
+</style></head><body>
+<div class="top" id="top"></div>
+<div class="kick" id="kick"></div>
+<h1 id="title"></h1>
+<div class="sub" id="sub"></div>
+<div class="wrap" id="wrap"></div>
+<div class="band"><p>Comment to get access</p><b id="kw"></b></div>
+<script>
+const D = window.DATA, B = D.brand, C = B.colors;
+const r = document.documentElement.style;
+r.setProperty('--bg1', C.bg_top); r.setProperty('--bg2', C.bg_bottom); r.setProperty('--accent', C.accent);
+r.setProperty('--soft', C.accent_soft); r.setProperty('--ink', C.ink); r.setProperty('--band', C.band); r.setProperty('--kw', C.keyword);
+r.setProperty('--ft', `'${B.fonts.title}'`); r.setProperty('--fb', `'${B.fonts.body}'`);
+const l = document.createElement('link'); l.rel = 'stylesheet';
+l.href = `https://fonts.googleapis.com/css2?family=${B.fonts.title.replace(/ /g,'+')}:wght@500;600;700;800&family=${B.fonts.body.replace(/ /g,'+')}:wght@400;500;600;700&display=block`;
+const fontsLoaded = new Promise(r => { l.onload = l.onerror = r; }); document.head.appendChild(l);
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+document.getElementById('top').innerHTML = B.logo ? `<img src="${B.logo}">` : `<span class="nm">${esc(B.name)}</span>`;
+document.getElementById('kick').textContent = D.kicker || '';
+let t = esc(D.title); if (D.highlight) t = t.replace(esc(D.highlight), `<span>${esc(D.highlight)}</span>`);
+document.getElementById('title').innerHTML = t;
+document.getElementById('sub').textContent = D.sub || '';
+document.getElementById('kw').textContent = D.keyword;
+const lines = '<div class="ln w1"></div><div class="ln w2"></div><div class="ln w3"></div><div class="ln w2"></div><div class="ln w1"></div><div class="ln w3"></div><div class="ln w2"></div>';
+document.getElementById('wrap').innerHTML = (D.parts || []).slice(0, 3).map(p =>
+  `<div class="pg"><div class="pl">${esc(p.label)}</div><div class="pt">${esc(p.title)}</div>${lines}</div>`).join('') +
+  `<div class="lock">🔒 Full playbook</div>`;
+fontsLoaded.then(() => document.fonts.ready).then(() => Promise.all([ ...[...document.images].map(i => i.complete ? 1 : new Promise(r => i.onload = i.onerror = r))]))
+  .then(() => setTimeout(() => window.READY = true, 400));
+</script></body></html>

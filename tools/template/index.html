@@ -1,0 +1,86 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free tool</title>
+<!-- Free-tool lead magnet engine. All the content and logic live in tool.js (one file per tool).
+     Flow: a few inputs -> instant result with a big number (the WOW) -> the first items in full,
+     the rest blurred (the FRUSTRATION) -> "book a demo to see the rest" (+ optional email to a webhook). -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--accent:#5B8CFF;--ink:#0B1020;--muted:#5E6478;--line:#E4E7EF;--soft:#F4F6FB;--bg1:#2B3A67;--bg2:#0F1733}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;color:var(--ink);background:#fff;min-height:100vh}
+header{background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#fff;padding:56px 16px 120px;text-align:center}
+header .logo{height:34px;margin-bottom:26px}
+header .nm{font-family:Outfit;font-weight:700;font-size:24px;display:block;margin-bottom:22px}
+h1{font-family:Outfit;font-weight:800;font-size:clamp(32px,5vw,52px);line-height:1.05;max-width:760px;margin:0 auto 14px;letter-spacing:-.01em}
+header p{font-size:18px;opacity:.85;max-width:620px;margin:0 auto}
+main{max-width:760px;margin:-80px auto 60px;padding:0 16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:0 20px 50px rgba(11,16,32,.12);margin-bottom:22px}
+label{display:block;font-weight:600;font-size:15px;margin:18px 0 8px}
+label:first-child{margin-top:0}
+.hint{font-weight:400;color:var(--muted);font-size:13px;margin-left:6px}
+input,select{width:100%;font:inherit;font-size:16px;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--soft);border-radius:100px;padding:8px 14px;font-size:14px;cursor:pointer;user-select:none}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.go{margin-top:24px;width:100%;background:var(--accent);color:#fff;border:0;border-radius:10px;font:600 17px Inter;padding:16px;cursor:pointer}
+.go:disabled{opacity:.5;cursor:default}
+#result{display:none}
+.wow{text-align:center;padding:10px 0 6px}
+.wow .n{font-family:Outfit;font-weight:800;font-size:clamp(56px,10vw,92px);line-height:1;color:var(--accent)}
+.wow .t{font-family:Outfit;font-weight:700;font-size:24px;margin-top:8px}
+.wow .s{color:var(--muted);margin-top:8px;font-size:15px}
+.item{border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:14px}
+.item .h{display:flex;justify-content:space-between;gap:12px;font-weight:700;font-size:17px}
+.item .h s{text-decoration:none;color:var(--accent);white-space:nowrap}
+.item .d{color:var(--muted);font-size:15px;margin-top:6px;line-height:1.5}
+.lockzone{position:relative;margin-top:14px}
+.lockzone .blur{filter:blur(6px);pointer-events:none;user-select:none}
+.gate{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.gate .box{background:var(--ink);color:#fff;border-radius:16px;padding:24px;max-width:430px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.gate h3{font-family:Outfit;font-size:22px;margin-bottom:8px}
+.gate p{font-size:15px;opacity:.8;margin-bottom:16px;line-height:1.45}
+.gate a{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;border-radius:10px;padding:13px 20px}
+.demo{background:#FFF4D6;color:#7A5A00;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:18px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding-bottom:40px}
+</style></head><body>
+<header><div id="brand"></div><h1 id="title"></h1><p id="sub"></p></header>
+<main>
+  <div class="card" id="form"></div>
+  <div class="card" id="result"></div>
+</main>
+<footer id="foot"></footer>
+<script src="tool.js"></script>
+<script>
+const T = window.TOOL, esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+document.title = T.title;
+for (const [k, v] of Object.entries(T.colors || {})) document.documentElement.style.setProperty('--' + k, v);
+document.getElementById('brand').innerHTML = T.logo ? `<img class="logo" src="${esc(T.logo)}" alt="">` : `<span class="nm">${esc(T.brand)}</span>`;
+document.getElementById('title').textContent = T.title;
+document.getElementById('sub').textContent = T.subtitle;
+document.getElementById('foot').innerHTML = esc(T.footer || '');
+const state = {};
+const f = document.getElementById('form');
+f.innerHTML = (T.demoData ? `<div class="demo">${esc(T.demoData)}</div>` : '') + T.inputs.map(i => {
+  const h = i.hint ? `<span class="hint">${esc(i.hint)}</span>` : '';
+  if (i.type === 'chips') return `<label>${esc(i.label)}${h}</label><div class="chips" data-id="${i.id}">${i.options.map(o => `<span class="chip" data-v="${esc(o.value)}">${esc(o.label)}</span>`).join('')}</div>`;
+  if (i.type === 'select') return `<label>${esc(i.label)}${h}</label><select data-id="${i.id}">${i.options.map(o => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join('')}</select>`;
+  return `<label>${esc(i.label)}${h}</label><input data-id="${i.id}" type="${i.type || 'text'}" placeholder="${esc(i.placeholder || '')}">`;
+}).join('') + `<button class="go" id="go">${esc(T.button || 'Show my result')}</button>`;
+f.querySelectorAll('.chips').forEach(c => { state[c.dataset.id] = []; c.onclick = e => {
+  const ch = e.target.closest('.chip'); if (!ch) return; ch.classList.toggle('on');
+  state[c.dataset.id] = [...c.querySelectorAll('.chip.on')].map(x => x.dataset.v); }; });
+document.getElementById('go').onclick = () => {
+  f.querySelectorAll('input,select').forEach(el => state[el.dataset.id] = el.type === 'number' ? Number(el.value || 0) : el.value);
+  const err = T.validate && T.validate(state); if (err) { alert(err); return; }
+  const R = T.compute(state);
+  const free = R.items.slice(0, T.freeItems ?? 2), locked = R.items.slice(T.freeItems ?? 2);
+  const item = x => `<div class="item"><div class="h"><span>${esc(x.title)}</span><s>${esc(x.value || '')}</s></div><div class="d">${esc(x.detail || '')}</div></div>`;
+  const cal = T.gate.url + (T.gate.url.includes('?') ? '&' : '?') + 'utm_source=lead-magnet&utm_campaign=' + encodeURIComponent(T.slug);
+  const res = document.getElementById('result');
+  res.innerHTML = `<div class="wow"><div class="n">${esc(R.big)}</div><div class="t">${esc(R.headline)}</div><div class="s">${esc(R.note || '')}</div></div>` +
+    free.map(item).join('') +
+    (locked.length ? `<div class="lockzone"><div class="blur">${locked.map(item).join('')}</div><div class="gate"><div class="box"><h3>${esc(T.gate.title.replace('{n}', locked.length))}</h3><p>${esc(T.gate.text)}</p><a href="${esc(cal)}" target="_blank" rel="noopener">${esc(T.gate.button)}</a></div></div></div>` : '');
+  res.style.display = 'block'; res.scrollIntoView({ behavior: 'smooth' });
+  if (T.webhook) fetch(T.webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tool: T.slug, inputs: state, result: { big: R.big, headline: R.headline }, at: new Date().toISOString() }) }).catch(() => {});
+};
+</script></body></html>

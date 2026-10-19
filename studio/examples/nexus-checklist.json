@@ -1,0 +1,31 @@
+{
+  "_readme": "EXAMPLE only, to show the generators working. The two numbers (17,000 jurisdictions, 6,000 changes a year) come from Taxwire's own LinkedIn page. Everything else is a placeholder Pau replaces with his real material.",
+  "slug": "nexus-checklist",
+  "keyword": "NEXUS",
+  "kicker": "Here's how, step by step",
+  "title": "Find every state you owe sales tax in, before they find you",
+  "highlight": "every state",
+  "sub": "The 5-step check our tax team runs on every new customer.",
+  "parts": [
+    { "label": "Part 1", "title": "Where you have nexus" },
+    { "label": "Part 2", "title": "What you owe today" },
+    { "label": "Part 3", "title": "How to fix it in 2 weeks" }
+  ],
+  "slides": [
+    { "n": "1", "title": "List every state you ship or sell to", "body": ["Pull 12 months of orders from Stripe or your billing tool.", "Group revenue and order count by state."] },
+    { "n": "2", "title": "Compare each state to its threshold", "body": ["Each state sets its own sales or order threshold.", "Cross it once and you owe tax from that date."] },
+    { "n": "3", "title": "Check what you already sell that is taxable", "body": ["SaaS is taxed in some states and not in others.", "Same product, 17,000 different jurisdictions."] }
+  ],
+  "locked": ["Step 4 · Estimate your back taxes, state by state", "Step 5 · Register, file and stop thinking about it", "The threshold table for all 50 states"],
+  "video": {
+    "scenes": [
+      { "type": "punch", "words": "a letter from a state you never sold in", "dur": 2.2 },
+      { "type": "count", "to": 17000, "label": "taxing jurisdictions in the US", "dur": 1.6 },
+      { "type": "count", "to": 6000, "label": "tax law changes every year", "dur": 1.5 },
+      { "type": "list", "title": "the 5-step nexus check", "items": ["1/ list every state you sell to", "2/ compare to each threshold", "3/ check what's taxable", "4/ estimate back taxes", "5/ register and file"], "dur": 3.2 },
+      { "type": "shot", "caption": "what it looks like for a real customer", "dur": 2.0 },
+      { "type": "locked", "title": "the full checklist", "dur": 1.8 },
+      { "type": "cta", "dur": 2.4 }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "_readme": "Filled during onboarding (skill lead-magnet, step 0). Paths are relative to this file. Until Pau sends his assets, these are neutral placeholders.",
+  "name": "Taxwire",
+  "logo": "",
+  "website": "taxwire.com",
+  "fonts": { "title": "Outfit", "body": "Inter" },
+  "colors": {
+    "bg_top": "#2B3A67",
+    "bg_bottom": "#0F1733",
+    "accent": "#5B8CFF",
+    "accent_soft": "#DCE6FF",
+    "ink": "#0B1020",
+    "paper": "#FFFFFF",
+    "band": "#05070F",
+    "keyword": "#7FA6FF"
+  },
+  "screenshots": [],
+  "author": { "name": "Pau Grabuleda", "title": "Head of GTM at Taxwire", "photo": "" },
+  "demo_url": "https://www.taxwire.com"
+}

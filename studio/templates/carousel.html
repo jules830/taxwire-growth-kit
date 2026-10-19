@@ -1,0 +1,59 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- LinkedIn document post (PDF), 1080x1350 per page.
+     Cover (hook) -> value slides (really give) -> locked page (the frustration) -> CTA page with the keyword. -->
+<script>/*DATA*/</script>
+<style>
+@page{size:1080px 1350px;margin:0}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;font-family:var(--fb),sans-serif}
+.page{width:1080px;height:1350px;position:relative;overflow:hidden;page-break-after:always;padding:80px 80px 0;display:flex;flex-direction:column}
+.dark{color:#fff;background:radial-gradient(ellipse 90% 70% at 50% 0%,var(--accent) 0%,var(--bg1) 45%,var(--bg2) 100%)}
+.light{background:var(--paper);color:var(--ink)}
+.brand{display:flex;align-items:center;gap:14px;height:52px}
+.brand img{height:48px;background:#fff;border-radius:12px;padding:7px 12px}
+.brand .nm{font-family:var(--ft);font-weight:700;font-size:32px}
+.kick{margin-top:120px;font-family:var(--ft);font-weight:600;font-size:30px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+h1{font-family:var(--ft);font-weight:800;font-size:96px;line-height:1.02;margin:18px 0 28px;letter-spacing:-.015em}
+h1 span{color:var(--kw)}
+.sub{font-size:36px;font-weight:500;opacity:.95;line-height:1.3}
+.swipe{position:absolute;right:80px;bottom:80px;font-family:var(--ft);font-weight:700;font-size:34px;background:#fff;color:var(--ink);border-radius:100px;padding:18px 34px}
+.num{font-family:var(--ft);font-weight:800;font-size:220px;line-height:.9;color:var(--accent);margin-top:110px}
+.light h2{font-family:var(--ft);font-weight:800;font-size:72px;line-height:1.05;margin:30px 0 40px;letter-spacing:-.01em}
+.light li{list-style:none;font-size:38px;line-height:1.35;margin-bottom:28px;padding-left:48px;position:relative}
+.light li:before{content:"→";position:absolute;left:0;color:var(--accent);font-weight:700}
+.foot{position:absolute;left:80px;right:80px;bottom:60px;display:flex;justify-content:space-between;font-size:24px;color:#8a8fa3}
+.lockwrap{margin-top:60px;display:flex;flex-direction:column;gap:22px}
+.lk{background:#fff;color:var(--ink);border-radius:22px;padding:30px 34px;font-family:var(--ft);font-weight:700;font-size:36px;filter:blur(5px)}
+.lk:first-child{filter:blur(2.5px)}
+.pill{position:absolute;left:50%;top:640px;transform:translateX(-50%);background:var(--band);color:#fff;border-radius:100px;padding:22px 40px;font-family:var(--ft);font-weight:700;font-size:38px;box-shadow:0 14px 40px rgba(0,0,0,.45);white-space:nowrap}
+.cta{justify-content:center;text-align:center;background:var(--band);color:#fff}
+.cta p{font-family:var(--ft);font-size:44px;font-weight:600;opacity:.85}
+.cta b{display:block;font-family:var(--ft);font-size:200px;font-weight:800;color:var(--kw);letter-spacing:.02em;margin:10px 0 30px}
+.cta small{font-size:30px;opacity:.7}
+.cta .brand{position:absolute;top:80px;left:80px}
+</style></head><body><div id="deck"></div>
+<script>
+const D = window.DATA, B = D.brand, C = B.colors;
+const r = document.documentElement.style;
+r.setProperty('--bg1', C.bg_top); r.setProperty('--bg2', C.bg_bottom); r.setProperty('--accent', C.accent);
+r.setProperty('--soft', C.accent_soft); r.setProperty('--ink', C.ink); r.setProperty('--band', C.band);
+r.setProperty('--kw', C.keyword); r.setProperty('--paper', C.paper);
+r.setProperty('--ft', `'${B.fonts.title}'`); r.setProperty('--fb', `'${B.fonts.body}'`);
+const l = document.createElement('link'); l.rel = 'stylesheet';
+l.href = `https://fonts.googleapis.com/css2?family=${B.fonts.title.replace(/ /g,'+')}:wght@500;600;700;800&family=${B.fonts.body.replace(/ /g,'+')}:wght@400;500;600;700&display=block`;
+const fontsLoaded = new Promise(r => { l.onload = l.onerror = r; }); document.head.appendChild(l);
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const brand = B.logo ? `<div class="brand"><img src="${B.logo}"></div>` : `<div class="brand"><span class="nm">${esc(B.name)}</span></div>`;
+const total = 3 + (D.slides || []).length;
+const foot = i => `<div class="foot"><span>${esc(B.author?.name || B.name)}</span><span>${i} / ${total}</span></div>`;
+let title = esc(D.title); if (D.highlight) title = title.replace(esc(D.highlight), `<span>${esc(D.highlight)}</span>`);
+let html = `<section class="page dark">${brand}<div class="kick">${esc(D.kicker || '')}</div><h1>${title}</h1><div class="sub">${esc(D.sub || '')}</div><div class="swipe">Swipe →</div></section>`;
+(D.slides || []).forEach((s, i) => {
+  html += `<section class="page light">${brand.replace('class="nm"', 'class="nm" style="color:var(--ink)"')}<div class="num">${esc(s.n || i + 1)}</div><h2>${esc(s.title)}</h2><ul>${(s.body || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>${foot(i + 2)}</section>`;
+});
+html += `<section class="page dark">${brand}<div class="kick">What's in the full version</div><div class="lockwrap">${(D.locked || []).map(x => `<div class="lk">${esc(x)}</div>`).join('')}</div><div class="pill">🔒 In the full playbook</div></section>`;
+html += `<section class="page cta">${brand}<p>Comment to get access</p><b>${esc(D.keyword)}</b><small>${esc(D.cta_note || "I'll send it to you in DM")}</small></section>`;
+document.getElementById('deck').innerHTML = html;
+fontsLoaded.then(() => document.fonts.ready).then(() => Promise.all([...document.images].map(i => i.complete ? 1 : new Promise(r => i.onload = i.onerror = r))))
+  .then(() => setTimeout(() => window.READY = true, 400));
+</script></body></html>
